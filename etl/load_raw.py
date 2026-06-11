@@ -1,0 +1,93 @@
+import csv
+import os
+from src.sql_utils import read_sql_file
+
+BASE_DIR = os.getenv("PROJECT_DIR", os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+def initialize_raw_layer(cur):
+    raw_ddl_query = read_sql_file("sql/ddl/01_create_raw_tables.sql")
+    cur.execute(raw_ddl_query)
+    cur.execute("TRUNCATE TABLE raw.raw_fifa_wc;")
+
+def load_raw_layer(cur):
+    raw_dml_query = read_sql_file("sql/dml/01_load_raw_tables.sql")
+    csv_path = os.path.join(BASE_DIR, "data/raw/fifa_wc_mens_match_dataset_1970_2022.csv")
+    print("Loading CSV...")
+    with open(csv_path, "r") as file:
+        rows = csv.DictReader(file)
+        for row in rows:
+            row = {k.strip(): v.strip() for k, v in row.items()}
+            row = {k: (None if v == "" else v) for k, v in row.items()}
+            cur.execute(raw_dml_query, (
+                row["tournament_name"],
+                row["stage_name"],
+                row["group_name"],
+                row["group_stage"],
+                row["knockout_stage"],
+                row["replayed"],
+                row["replay"],
+                row["match_date"],
+                row["match_time"],
+                row["stadium_name"],
+                row["city_name"],
+                row["country_name"],
+                row["team_name"],
+                row["team_code"],
+                row["opponent_name"],
+                row["opponent_code"],
+                row["home_team"],
+                row["away_team"],
+                row["goals_for"],
+                row["goals_against"],
+                row["extra_time"],
+                row["penalty_shootout"],
+                row["penalties_for"],
+                row["penalties_against"],
+                row["result"],
+                row["is_host"],
+                row["yellow_cards"],
+                row["red_cards"],
+                row["possession"],
+                row["shots"],
+                row["shots_on_target"],
+                row["passes_completed"],
+                row["passes_attempted"],
+                row["corners"],
+                row["fouls"],
+                row["team_prior_matches"],
+                row["team_prior_win_rate"],
+                row["team_prior_goals_scored_avg"],
+                row["team_prior_goals_conceded_avg"],
+                row["opp_prior_matches"],
+                row["opp_prior_win_rate"],
+                row["opp_prior_goals_scored_avg"],
+                row["opp_prior_goals_conceded_avg"],
+                row["h2h_prior_matches"],
+                row["h2h_prior_win_rate"],
+                row["team_curr_form_pts_avg"],
+                row["team_curr_goals_scored_avg"],
+                row["team_curr_goals_conceded_avg"],
+                row["opp_curr_form_pts_avg"],
+                row["opp_curr_goals_scored_avg"],
+                row["opp_curr_goals_conceded_avg"],
+                row["possession_h1"],
+                row["possession_h2"],
+                row["shots_h1"],
+                row["shots_h2"],
+                row["shots_on_target_h1"],
+                row["shots_on_target_h2"],
+                row["passes_completed_h1"],
+                row["passes_completed_h2"],
+                row["passes_attempted_h1"],
+                row["passes_attempted_h2"],
+                row["corners_h1"],
+                row["corners_h2"],
+                row["fouls_h1"],
+                row["fouls_h2"],
+                row["yellow_cards_h1"],
+                row["yellow_cards_h2"],
+                row["red_cards_h1"],
+                row["red_cards_h2"],
+                row["outcome"]
+            ))
+    print("Raw layer loaded!")
