@@ -344,8 +344,7 @@ docker-compose down
 
 ## 📦 Dataset
 
-- **Source:** [FIFA Men's World Cup Dataset — Kaggle](https://www.kaggle.com/datasets)
-- **Records:** 1,322
+- - **Source:** [FIFA Men's World Cup Dataset — Kaggle](https://www.kaggle.com/datasets/isfakiqbalchowdhuruy/fifa-mens-world-cup-dataset-1970-2022)
 - **Columns:** 70
 - **Years:** 1970 — 2022
 
