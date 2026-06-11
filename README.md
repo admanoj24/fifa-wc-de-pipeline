@@ -353,6 +353,6 @@ docker-compose down
 
 <div align="center">
 
-**Built with ❤️ by [Your Name] using Python · PostgreSQL · Apache Airflow · Docker**
+**Built with ❤️ by Manoj Adhikari using Python · PostgreSQL · Apache Airflow · Docker**
 
 </div>
